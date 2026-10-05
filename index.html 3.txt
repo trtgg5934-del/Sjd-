@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة الكشف عن الحمار الصحيح</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button.btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button.btn:hover {
+            background-color: #0056b3;
+        }
+
+        .donkey-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .donkey-card {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid #ced4da;
+            transition: all 0.3s;
+        }
+
+        .donkey-card:hover {
+            background-color: #dee2e6;
+        }
+
+        .donkey-card.selected {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+
+        #result-message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        #final-message {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الشاشة الأولى: إدخال الاسم -->
+    <div id="step-1" class="card">
+        <h2>أهلاً بك!</h2>
+        <p>يرجى كتابة اسمك للبدء:</p>
+        <input type="text" id="username" placeholder="اكتب اسمك هنا...">
+        <br>
+        <button class="btn" onclick="startGame()">متابعة</button>
+    </div>
+
+    <!-- الشاشة الثانية: اللعبة -->
+    <div id="step-2" class="card hidden">
+        <h2 id="welcome-title"></h2>
+        <p>لعبة الكشف عن الحمار الصحيح (انقر على جميع الحمير):</p>
+
+        <div class="donkey-grid" id="donkeys-container">
+            <!-- سيتم توليد 10 حمير بواسطة JavaScript -->
+        </div>
+
+        <div id="result-message"></div>
+        <div id="final-message" class="hidden">يلا تبربش خلصت اللعبه</div>
+    </div>
+
+    <script>
+        let clickedCount = 0;
+        const totalDonkeys = 10;
+
+        function startGame() {
+            const name = document.getElementById('username').value;
+            if (name.trim() === "") {
+                alert("يرجى كتابة اسمك أولاً!");
+                return;
+            }
+
+            document.getElementById('welcome-title').innerText = "أهلاً بك يا " + name;
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+
+            generateDonkeys();
+        }
+
+        function generateDonkeys() {
+            const container = document.getElementById('donkeys-container');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= totalDonkeys; i++) {
+                const btn = document.createElement('div');
+                btn.className = 'donkey-card';
+                btn.innerText = "حمار " + i;
+                btn.onclick = function() {
+                    revealDonkey(this);
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        function revealDonkey(element) {
+            if (!element.classList.contains('selected')) {
+                element.classList.add('selected');
+                element.innerText = "سجاد 🫏";
+                document.getElementById('result-message').innerText = "صحححح عليك!";
+                clickedCount++;
+
+                if (clickedCount === totalDonkeys) {
+                    document.getElementById('final-message').classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
